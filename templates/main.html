@@ -1,0 +1,17 @@
+{% extends "base_logged.html" %}
+
+{% block title %}Bienvenue{% endblock %}
+
+{% block bodyId %}baseLoggedPage{% endblock %}
+
+{% block content %}
+<p>
+welcome home {{ logged_user.name }}!
+</p>
+<p>
+{% load django_tables2 %}
+
+{% render_table table %}
+</p>
+
+{% endblock %}
