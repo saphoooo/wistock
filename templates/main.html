@@ -5,13 +5,21 @@
 {% block bodyId %}baseLoggedPage{% endblock %}
 
 {% block content %}
-<p>
-welcome home {{ logged_user.name }}!
-</p>
-<p>
-{% load django_tables2 %}
-
-{% render_table table %}
-</p>
-
+<h1>Contenu du stock</h1>
+<section id="stockItems">
+	<table class="center">
+		<tr>
+			<th>Produit</th>
+			<th>Quantite</th>
+			<th>DLC</th>
+		</tr>
+		{% for item in stockItems %}
+		<tr>
+			<td>{{ item.name }}</td>
+			<td><div align =center>{{ item.quantity }}</div></td>
+			<td>{{ item.sled }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</section>
 {% endblock %}

@@ -7,7 +7,11 @@ from forms import loginForm
 from wistock.models import user, item
 
 def home(request):
-  return render_to_response('home.html')
+  stockItems = item.objects.order_by('sled')
+  return render_to_response ('home.html', {'stockItems': stockItems})
+
+def myadmin(request):
+  return render_to_response('myadmin.html')
 
 @csrf_exempt
 def login(request):
@@ -25,11 +29,14 @@ def login(request):
 def main(request):
   logged_user = get_logged_user_from_request(request)
   if logged_user:
-    queryset = user.objects.all()
-    table = simpleTable(queryset)
-    return render_to_response ('main.html', {'logged_user': logged_user, 'table': table})
+    stockItems = item.objects.order_by('sled')
+    return render_to_response ('main.html', {'logged_user': logged_user, 'stockItems': stockItems})
   else:
     return HttpResponseRedirect('/login')
+
+def test(request):
+  stockItems = item.objects.order_by('sled')
+  return render_to_response ('test.html', {'stockItems': stockItems})
 
 def get_logged_user_from_request(request):
   if 'logged_user_id' in request.session:

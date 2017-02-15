@@ -1,5 +1,4 @@
 from django.db import models
-import django_tables2 as tables #new
 import uuid
 
 class user(models.Model):
@@ -18,7 +17,3 @@ class item(models.Model):
   sled = models.DateField()
   def __unicode__(self):
     return self.name
-
-class simpleTable(tables.Table): #new
-  class Meta: #new
-    model = user #new
