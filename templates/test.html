@@ -12,22 +12,29 @@
 			<th>Produit</th>
 			<th>Quantite</th>
 			<th>DLC</th>
+			<td></td>
 		</tr>
 		{% for item in stockItems %}
 		<tr>
 			<td>{{ item.name }}</td>
 			<td><div align =center>{{ item.quantity }}</div></td>
-			<td>{{ item.sled }}</td>
+			<td>{{ item.sled|date:'Y-m-d' }}</td>
+			<td><form action="test" method="get" class="inlineForm">
+				<input type="hidden" name="name" value={{ item.name }} id="itemName" />
+				<input type="hidden" name="quantity" value={{ item.quantity }} id="itemQuantity" />
+				<input type="hidden" name="sled" value={{ item.sled|date:'Y-m-d' }} id="itemSled" />
+				<input type="hidden" name="remove" value="yes" />
+				<input type="submit" value="Remove" />
+			</form></td>
 		</tr>
 		{% endfor %}
-	</table>
-</section>
-<section id="stockAdd">
-	<form action="test" method="get" class="inlineForm">
-		<input type="text" name="name" id="itemName" />
-		<input type="text" name="quantity" id="itemQuantity" />
-		<input type="date" name="sled" id="itemSled" />
-		<input type="submit" value="Add" />
-	</form>
+		<tr>
+			<form action="test" method="get" class="inlineForm">
+				<td><input type="text" name="name" id="itemName" /></td>
+				<td><input type="text" name="quantity" id="itemQuantity" /></td>
+				<td><input type="date" name="sled" id="itemSled" /></td>
+				<td><input type="hidden" name="add" value="yes" /><input type="submit" value="Add" /></td>
+			</form>
+		</tr>
 </section>
 {% endblock %}

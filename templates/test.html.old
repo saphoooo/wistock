@@ -1,0 +1,33 @@
+{% extends "base_logged.html" %}
+
+{% block title %}Bienvenue{% endblock %}
+
+{% block bodyId %}baseLoggedPage{% endblock %}
+
+{% block content %}
+<h1>Contenu du stock</h1>
+<section id="stockItems">
+	<table class="center">
+		<tr>
+			<th>Produit</th>
+			<th>Quantite</th>
+			<th>DLC</th>
+		</tr>
+		{% for item in stockItems %}
+		<tr>
+			<td>{{ item.name }}</td>
+			<td><div align =center>{{ item.quantity }}</div></td>
+			<td>{{ item.sled }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</section>
+<section id="stockAdd">
+	<form action="test" method="get" class="inlineForm">
+		<input type="text" name="name" id="itemName" />
+		<input type="text" name="quantity" id="itemQuantity" />
+		<input type="date" name="sled" id="itemSled" />
+		<input type="submit" value="Add" />
+	</form>
+</section>
+{% endblock %}

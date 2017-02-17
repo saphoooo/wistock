@@ -36,6 +36,18 @@ def main(request):
 
 def test(request):
   stockItems = item.objects.order_by('sled')
+  if 'name' in request.GET and request.GET['name'] != '' and request.GET['quantity'] != ''):
+    if 'add' in request.GET and request.GET['add'] == 'yes':
+      if request.GET['sled'] != '':
+        newItem = item(name=request.GET['name'], quantity=request.GET['quantity'], sled=request.GET['sled'])
+        newItem.save()
+      else:
+        newItem = item(name=request.GET['name'], quantity=request.GET['quantity'], sled='1975-09-24')
+        newItem.save()
+    elif 'remove' in request.GET and request.GET['remove'] == 'yes':
+      item.objects.filter(name=request.GET['name'], quantity=request.GET['quantity'], sled=request.GET['sled']).delete()
+    else:
+      return render_to_response ('test.html', {'stockItems': stockItems})
   return render_to_response ('test.html', {'stockItems': stockItems})
 
 def get_logged_user_from_request(request):
