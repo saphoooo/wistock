@@ -3,6 +3,7 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F
 from forms import loginForm
 from wistock.models import user, item
 
@@ -26,29 +27,40 @@ def login(request):
     form = loginForm()
     return render_to_response ('login.html', {'form': form})
 
+#def main(request):
+#  logged_user = get_logged_user_from_request(request)
+#  if logged_user:
+#    stockItems = item.objects.order_by('sled')
+#    return render_to_response ('main.html', {'logged_user': logged_user, 'stockItems': stockItems})
+#  else:
+#    return HttpResponseRedirect('/login')
+
 def main(request):
   logged_user = get_logged_user_from_request(request)
   if logged_user:
     stockItems = item.objects.order_by('sled')
-    return render_to_response ('main.html', {'logged_user': logged_user, 'stockItems': stockItems})
+    if 'name' in request.GET and request.GET['name'] != '' and request.GET['quantity'] != '':
+      if 'add' in request.GET and request.GET['add'] == 'yes':
+        if request.GET['sled'] != '':
+          newItem = item(name=request.GET['name'], quantity=request.GET['quantity'], sled=request.GET['sled'])
+          newItem.save()
+        else:
+          newItem = item(name=request.GET['name'], quantity=request.GET['quantity'], sled='1975-09-24')
+          newItem.save()
+      elif 'remove' in request.GET and request.GET['remove'] == 'yes':
+        item.objects.filter(id=request.GET['id']).delete()
+      elif 'less' in request.GET and request.GET['less'] == 'yes':
+        if request.GET['quantity'] == '1':
+          item.objects.filter(id=request.GET['id']).delete()
+        else:
+          item.objects.filter(id=request.GET['id']).update(quantity=F('quantity') - 1)
+      elif 'more' in request.GET and request.GET['more'] == 'yes':
+        item.objects.filter(id=request.GET['id']).update(quantity=F('quantity') + 1)
+      else:
+        return render_to_response ('main.html', {'stockItems': stockItems})
+    return render_to_response ('main.html', {'stockItems': stockItems})
   else:
     return HttpResponseRedirect('/login')
-
-def test(request):
-  stockItems = item.objects.order_by('sled')
-  if 'name' in request.GET and request.GET['name'] != '' and request.GET['quantity'] != ''):
-    if 'add' in request.GET and request.GET['add'] == 'yes':
-      if request.GET['sled'] != '':
-        newItem = item(name=request.GET['name'], quantity=request.GET['quantity'], sled=request.GET['sled'])
-        newItem.save()
-      else:
-        newItem = item(name=request.GET['name'], quantity=request.GET['quantity'], sled='1975-09-24')
-        newItem.save()
-    elif 'remove' in request.GET and request.GET['remove'] == 'yes':
-      item.objects.filter(name=request.GET['name'], quantity=request.GET['quantity'], sled=request.GET['sled']).delete()
-    else:
-      return render_to_response ('test.html', {'stockItems': stockItems})
-  return render_to_response ('test.html', {'stockItems': stockItems})
 
 def get_logged_user_from_request(request):
   if 'logged_user_id' in request.session:

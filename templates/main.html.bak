@@ -1,23 +1,23 @@
-{% extends "base.html" %}
+{% extends "base_logged.html" %}
 
 {% block title %}Bienvenue{% endblock %}
 
-{% block bodyId %}homePage{% endblock %}
+{% block bodyId %}baseLoggedPage{% endblock %}
 
 {% block content %}
 <h1>Contenu du stock</h1>
 <section id="stockItems">
 	<table class="center">
 		<tr>
-			<th width="150px">Produit</th>
-			<th width="50px">Quantite</th>
-			<th width="150px">DLC</th>
+			<th>Produit</th>
+			<th>Quantite</th>
+			<th>DLC</th>
 		</tr>
 		{% for item in stockItems %}
 		<tr>
 			<td>{{ item.name }}</td>
 			<td><div align =center>{{ item.quantity }}</div></td>
-			<td><div align =center>{{ item.sled|date:'d/m/Y' }}</div></td>
+			<td>{{ item.sled }}</td>
 		</tr>
 		{% endfor %}
 	</table>
